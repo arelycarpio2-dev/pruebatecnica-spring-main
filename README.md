@@ -143,3 +143,22 @@ Spring Boot creará las tablas automáticamente (`ddl-auto=update`).
 cd backend
 mvn test
 ```
+## Manual de usuario
+
+### 01 - Inicio de Sesión
+![Login](doc/01-login.jpeg)
+
+### 02 - Listado de Empleados
+![Listado de Empleados](doc/02-list_empleados.jpeg)
+
+### 03 - Crear Empleado
+![Crear Empleado](doc/03-crear.jpeg)
+
+### 04 - Editar Empleado
+![Editar Empleado](doc/04-editar.jpeg)
+
+### 05 - Eliminar Empleado
+![Eliminar Empleado](doc/05-eliminar.jpeg)
+
+### 06 - Listado Final después de Eliminar
+![Listado Final](doc/06-lista_final_eliminado.jpeg)

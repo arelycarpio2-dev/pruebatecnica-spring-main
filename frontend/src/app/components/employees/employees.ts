@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable, switchMap, catchError, of } from 'rxjs';
 import { AuthService } from '../../services/auth';
 import { EmployeeService, EmployeeResponse } from '../../services/employee';
 
@@ -10,9 +11,7 @@ import { EmployeeService, EmployeeResponse } from '../../services/employee';
   standalone: false,
 })
 export class Employees implements OnInit {
-  employees: EmployeeResponse[] = [];
-  loading = false;
-  error = '';
+  employees$!: Observable<EmployeeResponse[]>;
 
   constructor(
     private employeeService: EmployeeService,
@@ -21,28 +20,18 @@ export class Employees implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadEmployees();
-  }
-
-  loadEmployees(): void {
-    this.loading = true;
-    this.employeeService.findAll().subscribe({
-      next: (data) => {
-        this.employees = data;
-        this.loading = false;
-      },
-      error: () => {
-        this.error = 'Error al cargar empleados';
-        this.loading = false;
-      },
-    });
+    this.employees$ = this.employeeService.onRefresh.pipe(
+      switchMap(() => this.employeeService.findAll().pipe(
+        catchError(() => of([]))
+      ))
+    );
   }
 
   onDelete(id: number): void {
     if (confirm('¿Está seguro de eliminar este empleado?')) {
       this.employeeService.delete(id).subscribe({
-        next: () => this.loadEmployees(),
-        error: () => (this.error = 'Error al eliminar empleado'),
+        next: () => this.employeeService.notifyRefresh(),
+        error: () => {},
       });
     }
   }

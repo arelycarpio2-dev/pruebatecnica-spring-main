@@ -11,39 +11,41 @@
     <button class="btn-primary" routerLink="/empleados/nuevo">+ Nuevo Empleado</button>
   </div>
 
-  <div class="error" *ngIf="error">{{ error }}</div>
+  <ng-container *ngIf="employees$ | async as employees; else loading">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellidos</th>
+          <th>Fecha Nacimiento</th>
+          <th>Género</th>
+          <th>Identificación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emp of employees">
+          <td>{{ emp.id }}</td>
+          <td>{{ emp.nombre }}</td>
+          <td>{{ emp.apellidos }}</td>
+          <td>{{ emp.fechaNacimiento }}</td>
+          <td>{{ emp.genero }}</td>
+          <td>{{ emp.numeroIdentificacion }}</td>
+          <td class="actions-cell">
+            <button class="btn-edit" (click)="onEdit(emp.id)">Editar</button>
+            <button class="btn-delete" (click)="onDelete(emp.id)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-  <div class="loading" *ngIf="loading">Cargando empleados...</div>
+    <div class="empty" *ngIf="employees.length === 0">
+      No hay empleados registrados.
+    </div>
+  </ng-container>
 
-  <table class="table" *ngIf="!loading">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Fecha Nacimiento</th>
-        <th>Género</th>
-        <th>Identificación</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let emp of employees">
-        <td>{{ emp.id }}</td>
-        <td>{{ emp.nombre }}</td>
-        <td>{{ emp.apellidos }}</td>
-        <td>{{ emp.fechaNacimiento }}</td>
-        <td>{{ emp.genero }}</td>
-        <td>{{ emp.numeroIdentificacion }}</td>
-        <td class="actions-cell">
-          <button class="btn-edit" (click)="onEdit(emp.id)">Editar</button>
-          <button class="btn-delete" (click)="onDelete(emp.id)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="empty" *ngIf="!loading && employees.length === 0">
-    No hay empleados registrados.
-  </div>
+  <ng-template #loading>
+    <div class="loading">Cargando empleados...</div>
+  </ng-template>
 </div>

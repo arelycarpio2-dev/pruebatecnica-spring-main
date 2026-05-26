@@ -74,6 +74,7 @@ export class EmployeeForm implements OnInit {
     operation.subscribe({
       next: () => {
         this.loading = false;
+        this.employeeService.notifyRefresh();
         this.router.navigate(['/empleados']);
       },
       error: (err) => {

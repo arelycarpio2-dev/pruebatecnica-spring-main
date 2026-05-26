@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 export interface EmployeeRequest {
   nombre: string;
@@ -22,11 +22,20 @@ export interface EmployeeResponse {
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
   private apiUrl = 'http://localhost:8080/api/empleados';
+  private refreshSubject = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) {}
 
+  get onRefresh(): Observable<number> {
+    return this.refreshSubject.asObservable();
+  }
+
+  notifyRefresh(): void {
+    this.refreshSubject.next(this.refreshSubject.value + 1);
+  }
+
   findAll(): Observable<EmployeeResponse[]> {
-    return this.http.get<EmployeeResponse[]>(this.apiUrl);
+    return this.http.get<EmployeeResponse[]>(`${this.apiUrl}?_=${Date.now()}`);
   }
 
   findById(id: number): Observable<EmployeeResponse> {
