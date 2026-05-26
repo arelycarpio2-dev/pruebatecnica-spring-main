@@ -1,0 +1,69 @@
+<div class="form-container">
+  <div class="form-card">
+    <h2>{{ isEdit ? 'Editar Empleado' : 'Nuevo Empleado' }}</h2>
+    <form (ngSubmit)="onSubmit()" #employeeForm="ngForm">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input
+          id="nombre"
+          type="text"
+          [(ngModel)]="employee.nombre"
+          name="nombre"
+          placeholder="Ingrese el nombre"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="apellidos">Apellidos</label>
+        <input
+          id="apellidos"
+          type="text"
+          [(ngModel)]="employee.apellidos"
+          name="apellidos"
+          placeholder="Ingrese los apellidos"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+        <input
+          id="fechaNacimiento"
+          type="date"
+          [(ngModel)]="employee.fechaNacimiento"
+          name="fechaNacimiento"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="genero">Género</label>
+        <select
+          id="genero"
+          [(ngModel)]="employee.genero"
+          name="genero"
+          required
+        >
+          <option value="" disabled>Seleccione un género</option>
+          <option *ngFor="let g of generos" [value]="g">{{ g }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="numeroIdentificacion">Número de Identificación</label>
+        <input
+          id="numeroIdentificacion"
+          type="text"
+          [(ngModel)]="employee.numeroIdentificacion"
+          name="numeroIdentificacion"
+          placeholder="Ingrese el número de identificación"
+          required
+        />
+      </div>
+      <div class="form-error" *ngIf="error">{{ error }}</div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="loading">
+          {{ loading ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
